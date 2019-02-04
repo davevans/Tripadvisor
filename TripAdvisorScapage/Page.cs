@@ -28,7 +28,8 @@ namespace TripAdvisorScapage
             return _reviewsNode
                     .Descendants()
                     .Where(n => n.HasClass("review-container"))
-                    .Select(rc => rc.GetReview())
+                    .Select(async rc => await rc.GetReviewAsync())
+                    .Select(t => t.Result)
                     .ToList();
         }
 

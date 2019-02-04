@@ -14,7 +14,9 @@ namespace TripAdvisorScapage
         [FieldConverter(ConverterKind.Date, "dd MMMM yyyy")]
         public DateTime ReviewDate { get; set; }
         public string Reviewer { get; set; }
-        
         public string ReviewerLocation { get; set; }
+        public string ReviewerAgeRange { get; set; }
+        public string AgeRange { get; set; }
+        public string Sex { get; set; }
     }
 }

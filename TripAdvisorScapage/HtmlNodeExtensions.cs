@@ -2,12 +2,16 @@
 using System;
 using System.Linq;
 using System.Web;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace TripAdvisorScapage
 {
     public static class HtmlNodeExtensions
     {
-        public static Review GetReview(this HtmlNode node)
+        private static Regex memberInfoRegEx = new Regex(@"^UID_(?<uid>[A-Z0-9]+)-SRC_(?<id>\d+)$", RegexOptions.Compiled);
+
+        public async static Task<Review> GetReviewAsync(this HtmlNode node)
         {
             var id = node.GetAttributeValue("data-reviewId", null);
 
@@ -82,6 +86,25 @@ namespace TripAdvisorScapage
 
             var location = locationNode?.InnerText ?? string.Empty;
 
+            var memberInfoNode = node.Descendants().FirstOrDefault(n => n.HasClass("memberOverlayLink"));
+            var memberKey = memberInfoNode?.Attributes["id"]?.Value;
+            (string, string) ageRangeAndSex = default;
+
+            if (!string.IsNullOrEmpty(memberKey))
+            {
+                var match = memberInfoRegEx.Match(memberKey);
+                if (match.Success)
+                {
+                    var uid = match.Groups["uid"].Value;
+                    var mid = match.Groups["id"].Value;
+
+                    ageRangeAndSex = await MemberInfo.GetAgeRangeAndSex(uid, mid);
+                }
+            }
+
+
+            var ageRange = ageRangeAndSex.Item1 ?? string.Empty;
+            var sex = ageRangeAndSex.Item2 ?? string.Empty;
 
             return new Review
             {
@@ -91,7 +114,9 @@ namespace TripAdvisorScapage
                 Title = title,
                 Text = reviewText,
                 Reviewer = reviewer,
-                ReviewerLocation = location
+                ReviewerLocation = location,
+                Sex = sex,
+                AgeRange = ageRange
             };
         }
     }
