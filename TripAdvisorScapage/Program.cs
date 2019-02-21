@@ -43,7 +43,7 @@ namespace TripAdvisorScapage
                 }
 
                 // get reviews
-                var pageReviews = page.GetReviews();
+                var pageReviews = await page.GetReviewsAsync();
                 Console.WriteLine($"Found {pageReviews.Count} reviews on page {page.PageNumber}.");
 
                 reviews.AddRange(pageReviews);

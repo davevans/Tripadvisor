@@ -2,7 +2,7 @@
   "profiles": {
     "TripAdvisorScapage": {
       "commandName": "Project",
-      "commandLineArgs": "-p https://www.tripadvisor.com.au/ShowUserReviews-g580429-d547580-r236561551-Chartwell-Westerham_Sevenoaks_District_Kent_England.html -s \"C:\\tmp\\test.csv\" -m 3"
+      "commandLineArgs": "-p https://www.tripadvisor.com.au/Attraction_Review-g60801-d106611-Reviews-Franklin_Delano_Roosevelt_Home-Hyde_Park_New_York.html -s \"C:\\tmp\\test.csv\" -m 3"
     }
   }
 }

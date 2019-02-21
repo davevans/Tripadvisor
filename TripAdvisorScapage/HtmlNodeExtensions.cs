@@ -13,7 +13,7 @@ namespace TripAdvisorScapage
 
         public async static Task<Review> GetReviewAsync(this HtmlNode node)
         {
-            var id = node.GetAttributeValue("data-reviewId", null);
+            var id = node.GetAttributeValue("data-reviewlistingid", null);
 
             // review date
             DateTime ratingDate = DateTime.MinValue;
@@ -98,7 +98,14 @@ namespace TripAdvisorScapage
                     var uid = match.Groups["uid"].Value;
                     var mid = match.Groups["id"].Value;
 
-                    ageRangeAndSex = await MemberInfo.GetAgeRangeAndSex(uid, mid);
+                    try
+                    {
+                        ageRangeAndSex = await MemberInfo.GetAgeRangeAndSex(uid, mid);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Failed to get age range and sex. {ex.ToString()}");
+                    }
                 }
             }
 
@@ -118,6 +125,12 @@ namespace TripAdvisorScapage
                 Sex = sex,
                 AgeRange = ageRange
             };
+
+        }
+
+        public static string GetReviewId(this HtmlNode node)
+        {
+            return node.GetAttributeValue("data-reviewId", null);
         }
     }
 }
